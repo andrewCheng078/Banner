@@ -55,12 +55,23 @@
         };
 
         Module.prototype.init = function ( opts ) {
+            var jQuery = this.$ele;
+            // jQuery.append(`<button class="wrap_btn"> Click Me</button>`)
             console.log('this is init');
             
         };
         
         Module.prototype.toggle = function ( opts ) {
             var jQuery = this.$ele;
+                // jQuery.slideToggle("slow");
+            // if(jQuery.css('display') == 'none') {
+            //     //自己的处理
+            //     jQuery.show();
+            // } else {
+            //     //自己的处理
+            //     jQuery.hide();
+            // }
+        
         
           
         };
@@ -72,8 +83,8 @@
        
         Module.prototype.close = function ( opts ) {
             var jQuery = this.$ele;
-           
-            jQuery.hide();
+            jQuery.addClass("close");
+            // jQuery.hide();
             console.log('this is close!!!:', opts);
             
         };
