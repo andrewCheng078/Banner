@@ -46,9 +46,9 @@
     
         Module.DEFAULTS = {
             style: 'classname',
-            openAtStart:'true',
-            autoToggle:'true',
-            key:'10',
+            openAtStart:true,
+            autoToggle:true,
+            transition: true,
             whenClickCallback: function() {
                 console.log('whenClickCallback,DEFAULTS');
             }
