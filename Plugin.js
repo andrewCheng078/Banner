@@ -83,17 +83,23 @@
             typeof(opts)==="number" ? setTimeout(function(){ open()},opts) : open();
          
             function open(){
+                // jQuery.removeClass("closed");
+                // jQuery.addClass("opened");
+                // var hasopened = $('.banner').hasClass("opened");
+                // if(!hasopened){jQuery.addClass("opened");}
                 jQuery.removeClass("closed");
                 jQuery.addClass("opened");
 
-
-
-                // jQuery.addClass("opening");
-                // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-                //     jQuery.removeClass("opening");
-                // });
-                // jQuery.removeClass("opening");
-                // jQuery.addClass("opened");
+//  $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+//                var hasopened = $('.banner').hasClass("opened");
+//                var hasopening = $('.banner').hasClass("opening");
+            
+               
+//                 if(hasopening){
+//                     jQuery.removeClass("opening");
+//                     jQuery.addClass("opened");
+//                 }
+//             });
 
                 $('.wrap_btn').text('收合')
             }
@@ -107,10 +113,21 @@
             typeof(opts)==="number" ? setTimeout(function(){ close()},opts) : close();
           
           function close(){
-            // jQuery.addClass("closing");
-            // jQuery.removeClass("closing");
-            jQuery.addClass("closed");
-            jQuery.removeClass("opened");
+            jQuery.addClass("closing");
+            $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+               var hasclosing = $('.banner').hasClass("closing");
+               var hasopening = $('.banner').hasClass("opening");
+               console.log(hasclosing)
+                if( hasclosing ){
+                    jQuery.removeClass("closing");
+                    jQuery.addClass("closed");
+                }
+                if(hasopening){
+                    jQuery.removeClass("opening");
+                    jQuery.addClass("opened");
+                }
+            });
+           jQuery.removeClass("opened");
             $('.wrap_btn').text('展開')
           }
 
