@@ -49,17 +49,25 @@
             $('.wrap_btn').click(function () {
                 $('.banner').lbx_lnop('toggle');
             })
+            this.transition(opts);
             if(opts.transition){ jQuery.addClass('transition')};
             if(opts.openAtStart){this.open(opts.openAtStart)}else{this.close(opts.openAtStart)};
             if(opts.autoToggle){this.toggle(opts.autoToggle)};
-            // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-            //      clearInterval(time)
-            // });
-            
-            for (var i = 1; i < 99999; i++)window.clearInterval(i);
-          
+     
+           
             
             console.log('this is init');
+        };
+        Module.prototype.transition = function ( opts ) {
+          
+        //     var whenTransition = setInterval(() => {
+        //        opts.whenTransition;
+        //     }, 50);
+        //     $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+        //         clearInterval(whenTransition);
+        //    });
+        console.log(' this.transition(opts);')
+          
         };
         
         Module.prototype.toggle = function ( opts ) {
@@ -71,12 +79,6 @@
         Module.prototype.open = function ( opts ) {
             var jQuery = this.$ele;
             
-           var time = setInterval(() => {
-                console.log('setinterval')
-            }, 50);
-            $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-                clearInterval(time);
-           });
     
             typeof(opts)==="number" ? setTimeout(function(){ open()},opts) : open();
          
@@ -101,13 +103,7 @@
        
         Module.prototype.close = function ( opts ) {
             var jQuery = this.$ele;
-            console.log('close opts',opts)
-            var time = setInterval(() => {
-                console.log('setinterval')
-            }, 50);
-            $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-                clearInterval(time);
-           });
+            this.transition;
             typeof(opts)==="number" ? setTimeout(function(){ close()},opts) : close();
           
           function close(){
