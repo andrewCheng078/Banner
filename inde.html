@@ -17,19 +17,17 @@
     }
 
     .banner {
-        height: 100%;
         position: relative;
-
-
+      
     }
 
     .transition {
-        transition:all .3s
+        transition: height .75s;
     }
 
     .banner img {
         width: 100%;
-        max-height: 300px;
+        height: 380px;
 
     }
 
@@ -43,14 +41,22 @@
         border: 1px solid black;
     }
 
-    .close {
+    .closed {
         height: 80px;
         overflow: hidden;
 
     }
+    .closing{
+        height: 80px;
+        overflow: hidden;
+        
+    }
 
-    .open {
-        height: 300px;
+    .opened {
+        height: 380px;
+    }
+    .opening{
+        height: 380px;
     }
 
     .cont {
@@ -89,10 +95,10 @@
         //     autoToggle: true, // [boolean|number] true | false | 3000
         //     // 設定模組在各狀態時的class
         //     class: {
-        //         closed: 'closed', // [string]
-        //             closing: 'closing', // [string]
-        //             opened: 'opened', // [string]
-        //             opening: 'opening' // [string]
+    //              closed: 'closed', // [string]
+    //             closing: 'closing', // [string]
+    //             opened: 'opened', // [string]
+    //             opening: 'opening' // [string]
         //     },
         //     // 是否要有transition效果
         //     transition: true,
@@ -105,38 +111,52 @@
 
             $('.banner').lbx_lnop({
             // 設定一開始是否為開或合
-            openAtStart:false, // [boolean] true | false
+            openAtStart:true, // [boolean] true | false
             // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
-            autoToggle: true, // [boolean|number] true | false | 3000
+            autoToggle:false, // [boolean|number] true | false | 3000
             // 是否要有transition效果
-            transition: true,
+            transition:true,
             // 當有transition時，要執行的callback function
             whenTransition: function () {
                 console.log('whenTransition');
             }
+            
+
         });
 
           
-            // $('.banner').lbx_lnop('open');
-            //  $('.banner').lbx_lnop('toggle ');
-
-            // $('.wrap_btn').click(function () {
-            //     // $('.banner').hide();
-            //     $('.banner').lbx_lnop('toggle');
-
-            // })
 
         })
+        // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+        //     // setInterval(()=>{
+        //     //     console.log('whenTransition');
+        //     // },1000)
+            
+        //   });
+        //js
+        //   const bannerEl = document.querySelector('.banner');
 
+        //   bannerEl.addEventListener('transitionend', ()=>{
+        //     console.log('whenTransition')
+        //   }, false);
 
-        // $('.banner').lbx_lnop('close');
-        // $('.banner').lbx_lnop({
-        //     key:'80',
-        //     name:'99'
-        // });
-        // $('.banner').lbx_lnop('toggle');
     </script>
 
 </body>
 
 </html>
+
+<!-- 目前已知問題 
+    
+class 狀態改變(ing?) 效果不明顯
+
+transition 打開會直接打開沒有過度
+如果transition=== false transitionend會有效果嗎??
+transition call back  -->
+
+
+
+
+
+
+

@@ -45,50 +45,89 @@
 
         Module.prototype.init = function ( opts ) {
             var jQuery = this.$ele;
-           console.log(opts)
             $('.banner').append(` <button class="wrap_btn"> 收合</button>`)
-           
             $('.wrap_btn').click(function () {
                 $('.banner').lbx_lnop('toggle');
             })
             if(opts.transition){ jQuery.addClass('transition')};
-            if(opts.autoToggle){this.toggle()};//己毫秒之後的判斷式待補
-            if(opts.openAtStart){this.open()};
+            if(opts.openAtStart){this.open(opts.openAtStart)}else{this.close(opts.openAtStart)};
+            if(opts.autoToggle){this.toggle(opts.autoToggle)};
+            // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+            //      clearInterval(time)
+            // });
+            
+            for (var i = 1; i < 99999; i++)window.clearInterval(i);
           
+            
             console.log('this is init');
         };
         
         Module.prototype.toggle = function ( opts ) {
             var jQuery = this.$ele;
-            // jQuery.toggleClass('close');
             const bannerHeight = jQuery.css('height') >= '80px';
-            bannerHeight ? this.open() : this.close();
+            bannerHeight ? this.open( opts) : this.close( opts);
         };
+
         Module.prototype.open = function ( opts ) {
             var jQuery = this.$ele;
-            jQuery.removeClass("close");
-            $('.wrap_btn').text('收合')
+            
+           var time = setInterval(() => {
+                console.log('setinterval')
+            }, 50);
+            $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+                clearInterval(time);
+           });
+    
+            typeof(opts)==="number" ? setTimeout(function(){ open()},opts) : open();
+         
+            function open(){
+                jQuery.removeClass("closed");
+                jQuery.addClass("opened");
+
+
+
+                // jQuery.addClass("opening");
+                // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+                //     jQuery.removeClass("opening");
+                // });
+                // jQuery.removeClass("opening");
+                // jQuery.addClass("opened");
+
+                $('.wrap_btn').text('收合')
+            }
+          
             console.log('this is open!!!:', opts);
         };
        
         Module.prototype.close = function ( opts ) {
             var jQuery = this.$ele;
-            jQuery.addClass("close");
+            console.log('close opts',opts)
+            var time = setInterval(() => {
+                console.log('setinterval')
+            }, 50);
+            $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
+                clearInterval(time);
+           });
+            typeof(opts)==="number" ? setTimeout(function(){ close()},opts) : close();
+          
+          function close(){
+            // jQuery.addClass("closing");
+            // jQuery.removeClass("closing");
+            jQuery.addClass("closed");
+            jQuery.removeClass("opened");
             $('.wrap_btn').text('展開')
-            // jQuery.hide();
+          }
+
             console.log('this is close!!!:', opts);
             
         };
     
 
         $.fn[ModuleName] = function ( methods, options ) {
-            console.log('methods',methods,'options',options)
             return this.each(function(){
-              
                 var $this = $(this);
                 var module = $this.data( ModuleName );
                 var opts = null;
-    
                 if ( !!module ) {
                     if ( typeof methods === 'string' &&  typeof options === 'undefined' ) {
                         // console.log(' module[methods]();')
