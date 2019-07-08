@@ -39,7 +39,7 @@
 
     Module.DEFAULTS = {
         openAtStart: true,
-        autoToggle: 3000, //open === true toggle will
+        autoToggle: false, //open === true toggle will
         transition: true,
         whenClickCallback: function () {
             console.log('whenClickCallback,DEFAULTS');
@@ -54,6 +54,8 @@
         })
         if (opts.transition) {
             jQuery.addClass('transition')
+        }else{
+            jQuery.addClass('transitionClose')
         };
         if (opts.openAtStart) {
             this.open(opts.openAtStart)
@@ -63,8 +65,11 @@
         if (opts.autoToggle) {
             this.toggle(opts.autoToggle)
         };
+        if(opts.whenTransition === undefined){
+            console.log('noooooo we need default')
+        }
         this.whenClickCallback = opts.whenTransition;
-
+        
         //clear all interval
         for (var i = 1; i < 99999; i++)
         window.clearInterval(i);

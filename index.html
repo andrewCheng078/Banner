@@ -24,6 +24,9 @@
     .transition {
         transition: height .75s;
     }
+    .transitionClose {
+        transition: height .0001s;
+    }
 
     .banner img {
         width: 100%;
@@ -59,25 +62,10 @@
         height: 380px;
     }
 
-    .cont {
-        width: 100px;
-        height: 100px;
-        border: 1px #CCC solid;
-        background-color: #EEE;
-        transition: height .3s linear, padding-top .3s linear, padding-bottom .3s linear, border-top-width .3s linear, border-top-width .3s linear;
-    }
-
-    .toggled {
-        overflow: hidden;
-        height: 20px;
-        border-width: 0 1px;
-    }
 </style>
 
 <body>
-    <button class="run-css">CSS slideToggle</button>
 
-    <div class="cont">Toggle this div</div>
     <div class="banner">
         <a class="wrap" href="#">
             <img class="img" src="./imgs/1200x380.png" title="輸入廣告促銷說明文字" alt="輸入廣告促銷說明文字">
@@ -85,9 +73,7 @@
     </div>
 
     <script>
-        $('.run-css').click(function () {
-            $('.cont').toggleClass('toggled');
-        });
+      
         // $('.banner').banner({
         //     // 設定一開始是否為開或合
         //     openAtStart: true, // [boolean] true | false
@@ -127,18 +113,7 @@
           
 
         })
-        // $('.banner').on('transitionend webkitTransitionEnd oTransitionEnd', function () {
-        //     // setInterval(()=>{
-        //     //     console.log('whenTransition');
-        //     // },1000)
-            
-        //   });
-        //js
-        //   const bannerEl = document.querySelector('.banner');
-
-        //   bannerEl.addEventListener('transitionend', ()=>{
-        //     console.log('whenTransition')
-        //   }, false);
+       
 
     </script>
 
