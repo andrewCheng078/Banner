@@ -15,7 +15,6 @@
         margin: 0;
         padding: 0;
     }
-
     .banner {
         position: relative;
         overflow: hidden;
@@ -24,6 +23,7 @@
     .transition {
         transition: height .75s;
     }
+
     .transitionClose {
         transition: height .0001s;
     }
@@ -31,37 +31,30 @@
     .banner img {
         width: 100%;
         height: 380px;
-
     }
-
-    .banner a {}
-
-    .wrap_btn {
+    .moveImg{
+        position: absolute;
+        top: -300px;
+    }
+    .btn {
         position: absolute;
         bottom: 10px;
         right: 5px;
         width: 100px;
         border: 1px solid black;
     }
-
     .closed {
         height: 80px;
-      
-
     }
-    .closing{
+    .closing {
         height: 80px;
-      
-        
     }
-
     .opened {
-        height: 380px;
+        height: 300px;
     }
-    .opening{
-        height: 380px;
+    .opening {
+        height: 300px;
     }
-
 </style>
 
 <body>
@@ -72,8 +65,8 @@
         </a>
     </div>
 
+
     <script>
-      
         // $('.banner').banner({
         //     // 設定一開始是否為開或合
         //     openAtStart: true, // [boolean] true | false
@@ -81,10 +74,10 @@
         //     autoToggle: true, // [boolean|number] true | false | 3000
         //     // 設定模組在各狀態時的class
         //     class: {
-    //              closed: 'closed', // [string]
-    //             closing: 'closing', // [string]
-    //             opened: 'opened', // [string]
-    //             opening: 'opening' // [string]
+        //              closed: 'closed', // [string]
+        //             closing: 'closing', // [string]
+        //             opened: 'opened', // [string]
+        //             opening: 'opening' // [string]
         //     },
         //     // 是否要有transition效果
         //     transition: true,
@@ -96,44 +89,41 @@
         $(document).ready(function () {
 
             $('.banner').lbx_lnop({
-            // 設定一開始是否為開或合
-            openAtStart:false, // [boolean] true | false
-            // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
-            autoToggle:true, // [boolean|number] true | false | 3000
-            // 是否要有transition效果
-            transition:true,
-            // 當有transition時，要執行的callback function
-            whenTransition: function () {
-                console.log('whenTransition');
-            }
-            
+                // 設定一開始是否為開或合
+                openAtStart: true, // [boolean] true | false
+                // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
+                autoToggle: 3000, // [boolean|number] true | false | 3000
+                // 是否要有transition效果
+                transition: true,
+                // 當有transition時，要執行的callback function
+                whenTransition: function () {
+                    console.log('whenTransition');
+                },
+                button: {
+                    closeText: '收合', // [string]
+                    openText: '展開', // [string]
+                    class: 'btn' // [string]
+                },
+                class: {
+                    closed: 'closed', // [string]
+                        closing: 'closing', // [string]
+                        opened: 'opened', // [string]
+                        opening: 'opening' // [string]
+                },
 
-        });
-
-          
-
+            });
         })
-       
 
+        // 測試用 
+
+
+
+        // $('.banner').lbx_lnop('open'); 
+
+        // $('.banner').lbx_lnop('close'); 
+        // $('.banner').lbx_lnop('toggle');
     </script>
 
 </body>
 
 </html>
-
-<!-- 測試用
-    
-
-$('.banner').lbx_lnop('toggle');
-
-$('.banner').lbx_lnop('open');
-
-$('.banner').lbx_lnop('close');
--->
-
-
-
-
-
-
-

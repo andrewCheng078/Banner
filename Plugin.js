@@ -1,29 +1,3 @@
-//需求 
-
-// 設定一開始是否為開或合
-//     openAtStart: true, // [boolean] true | false
-//     // 設定啟動後是否要自動開或合，若設為false，就不要自勳開合；若為true是馬上自動開合；若為數字是幾毫秒之後開合
-//     autoToggle: true, // [boolean|number] true | false | 3000
-//     // 設定收合展開按鈕
-//     button: {
-//         closeText: '收合', // [string]
-//         openText: '展開', // [string]
-//         class: 'btn' // [string]
-//     },
-//     // 設定模組在各狀態時的class
-//     class: {
-//         closed: 'closed', // [string]
-//             closing: 'closing', // [string]
-//             opened: 'opened', // [string]
-//             opening: 'opening' // [string]
-//     },
-//     // 是否要有transition效果
-//     transition: true,
-//     // 當有transition時，要執行的callback function
-//     whenTransition: function () {
-//         console.log('whenTransition');
-//     }
-
 (function ($) {
     'use strict';
     var ModuleName = 'lbx_lnop';
@@ -34,7 +8,7 @@
         this.option = options;
         this.class = null;
         this.whenClickCallback = "";
-
+        this.toggleTime=NaN;
     };
 
     Module.DEFAULTS = {
@@ -43,157 +17,203 @@
         transition: true,
         whenClickCallback: function () {
             console.log('whenClickCallback,DEFAULTS');
-        }
+        },
+        button: {
+            closeText: '收合', // [string]
+            openText: '展開', // [string]
+            class: 'btn' // [string]
+        },
+        class: {
+            closed: 'closed', // [string]
+                closing: 'closing', // [string]
+                opened: 'opened', // [string]
+                opening: 'opening' // [string]
+        },
     };
 
     Module.prototype.init = function (opts) {
-        var jQuery = this.$ele;
-        $('.banner').append(` <button class="wrap_btn"> 收合</button>`)
-        $('.wrap_btn').click(function () {
-            $('.banner').lbx_lnop('toggle');
+        const option = this.option;
+        const btn_class = option.button.class;
+        this.toggleTime = option.autoToggle;
+        this.$ele.append(`<button class="${btn_class}"> 收合</button>`);
+
+        let bannerButton = this.$ele.find(`.${btn_class}`);
+        console.log('bannerButton', bannerButton)
+        $(bannerButton).click(() => {
+            this.$ele.lbx_lnop('toggle');
         })
-        if (opts.transition) {
-            jQuery.addClass('transition')
-        }else{
-            jQuery.addClass('transitionClose')
-        };
-        if (opts.openAtStart) {
-            this.open(opts.openAtStart)
+
+        if (option.transition) {
+            this.$ele.addClass('transition')
         } else {
-            this.close(opts.openAtStart)
-        };
-        if (opts.autoToggle) {
-            this.toggle(opts.autoToggle)
-        };
-        if(opts.whenTransition === undefined){
-            console.log('noooooo we need default')
+            this.$ele.addClass('transitionClose')
         }
-        this.whenClickCallback = opts.whenTransition;
-        
-        //clear all interval
-        for (var i = 1; i < 99999; i++)
-        window.clearInterval(i);
+
+        if (option.openAtStart) {
+            this.open()
+        } else {
+            this.close()
+        };
+
+        if (option.autoToggle) {
+            this.toggle()
+        };
+        clearInterval(this.whenTransition);
 
         console.log('this is init');
     };
     Module.prototype.transition = function (opts) {
-        console.log(opts)
-        var whenTransition = setInterval(() => {
-            this.whenClickCallback();
+        const option = this.option;
+        this.whenTransition = setInterval(() => {
+            option.whenTransition();
         }, 25);
-        $('.banner').on('transitionend ', function () {
-            clearInterval(whenTransition);
-        });
 
+        this.$ele.on('transitionend ', () => {
+            clearInterval(this.whenTransition);
+        });
+        console.log('transition')
 
     };
 
     Module.prototype.toggle = function (opts) {
-        var jQuery = this.$ele;
-        const bannerHeight = jQuery.css('height');
+        console.log('you toggle me', opts)
+        const bannerHeight = this.$ele.css('height');
 
         if (bannerHeight >= '80px') {
-            this.open(opts);
+            this.open();
             this.transition();
         } else {
-            this.close(opts);
+            this.close();
             this.transition();
         }
-
     };
 
     Module.prototype.open = function (opts) {
+        console.log('open opts');
+        const option = this.option;
+        const img = this.$ele.find('.img');
+        const text = this.$ele.find(`.${option.button.class}`)
+        if (typeof (this.toggleTime) === "number"&&this.class!==null) {
+            const asycnTime = async () => {
+                await setTimeout(() => {
+                    this.class = "opened";
+                    this.$ele.addClass(option.class.opening);
+                    this.$ele.removeClass(option.class.closed);
+                }, this.toggleTime)
 
-        var jQuery = this.$ele;
+                await this.$ele.on('transitionend ', () => {
+                    if (this.class === "opened") {
+                        this.class = "opened";
+                        this.$ele.addClass(option.class.opened)
+                        $(img).removeClass('moveImg');
+                        this.$ele.removeClass(option.class.opening)
+                    }
+                });
+                this.toggleTime = false
 
-        if (typeof (opts) === "number") {
-            setTimeout(() => {
-                this.class = "opened";
-                jQuery.addClass("opened");
-                jQuery.removeClass("closed");
-            }, opts)
+            }
+            asycnTime();
         } else {
-
+            console.log(this.class)
             if (this.class === null) {
                 this.class = "opened";
-                jQuery.addClass("opened");
+                this.$ele.addClass(option.class.opened);
             } else if (this.class === "closed") {
                 this.class = "opening";
-                jQuery.addClass("opening")
-                jQuery.removeClass("closed")
+                this.$ele.addClass(option.class.opening)
+                $(img).removeClass('moveImg');
+                this.$ele.removeClass(option.class.closed)
             }
+
         }
 
-
-        $('.banner').on('transitionend ', () => {
+        this.$ele.on('transitionend ', () => {
             if (this.class === "opening") {
                 this.class = "opened";
-                jQuery.addClass("opened")
-                jQuery.removeClass("opening")
+                this.$ele.addClass(option.class.opened)
+                this.$ele.removeClass(option.class.opening)
             }
         });
-        $('.wrap_btn').text('收合');
 
-        console.log('this is open!!!:', opts);
+        $(text).text(option.button.closeText);
+
+        console.log('this is open!!!:');
 
     };
 
     Module.prototype.close = function (opts) {
-        var jQuery = this.$ele;
-        // typeof(opts)==="number" ? setTimeout(function(){ close()},opts) : close();
-        if (typeof (opts) === "number") {
-            setTimeout(() => {
-                this.class = "closed";
-                jQuery.addClass("closed");
-                jQuery.removeClass("opened");
-            }, opts)
-        } else {
+        const option = this.option
+        const img = this.$ele.find('.img');
+        const text = this.$ele.find(`.${option.button.class}`)
+        if (typeof (this.toggleTime) === "number"&&this.class!==null) {
+            const asycnTime = async () => {
+                await setTimeout(() => {
+                    this.class = "closing";
+                    this.$ele.addClass(option.class.closing);
+                    this.$ele.removeClass(option.class.opened);
+                }, this.toggleTime)
+              
+                await this.$ele.on('transitionend ', () => {
+                    if (this.class === "closing") {
+                        this.class = "closed";
+                        this.$ele.addClass(option.class.closed);
+                        $(img).addClass('moveImg');
+                        this.$ele.removeClass(option.class.closing);
+                    }
+                });
+                this.toggleTime = false;
+            }
+            asycnTime();
+            
+        } 
+        else {
             if (this.class === null) {
                 this.class = "closed";
-                jQuery.addClass("closed")
+                this.$ele.addClass(option.class.closed)
             } else if (this.class === "opened") {
                 this.class = "closing";
-                jQuery.addClass("closing")
-                jQuery.removeClass("opened")
+                this.$ele.addClass(option.class.closing)
+                this.$ele.removeClass(option.class.opened)
             }
         }
 
-        $('.banner').on('transitionend ', () => {
+        this.$ele.on('transitionend ', () => {
             if (this.class === "closing") {
                 this.class = "closed";
-                jQuery.addClass("closed")
-                jQuery.removeClass("closing")
+                this.$ele.addClass(option.class.closed)
+                $(img).addClass('moveImg')
+                this.$ele.removeClass(option.class.closing)
             }
         });
 
-        $('.wrap_btn').text('展開')
+        $(text).text(option.button.openText)
 
         console.log('this is close!!!:', opts);
 
     };
 
 
-    $.fn[ModuleName] = function (methods, options) {
+    $.fn[ModuleName] = function (options) {
+        console.log(options);
         return this.each(function () {
             var $this = $(this);
             var module = $this.data(ModuleName);
             var opts = null;
             if (!!module) {
-                if (typeof methods === 'string' && typeof options === 'undefined') {
-                    // console.log(' module[methods]();')
-                    module[methods]();
-                } else if (typeof methods === 'string' && typeof options === 'object') {
-                    module[methods](options);
-                    //  console.log('module[methods](options)');
+                console.log('sttmethod',typeof options === 'string')
+                if (typeof options === 'string' && typeof options !== 'undefined') {
+                    module[options]();
+                } else if (typeof options === 'string' && typeof options === 'object') {
+                    module[options](options);
                 } else {
                     console.log('unsupported options!');
                     throw 'unsupported options!';
                 }
             } else {
-                opts = $.extend({}, Module.DEFAULTS, (typeof methods === 'object' && options), (typeof options === 'object' && options));
+                opts = $.extend({}, Module.DEFAULTS,(typeof options === 'object' && options));
                 module = new Module(this, opts);
                 $this.data(ModuleName, module);
-                module.init(methods);
+                module.init();
             }
         });
     };
